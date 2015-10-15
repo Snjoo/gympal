@@ -7,8 +7,7 @@ public class GymService {
 	
 	public static void main(String[] args) {
         port(PORT);
-        staticFileLocation("/files");
         
-        get("/hello", (req, res) -> "Hello World");
+        get("/addroutine", (req, res) -> "Hello World");
     }
 }
