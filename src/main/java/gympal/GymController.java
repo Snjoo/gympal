@@ -1,7 +1,6 @@
 package gympal;
 
-import static spark.Spark.get;
-import static spark.Spark.port;
+import static spark.Spark.*;
 
 import java.util.List;
 
@@ -10,6 +9,12 @@ public class GymController {
 	
 	public GymController(final GymService gymService) {
         port(PORT);
+        staticFileLocation("/webapp");
+        
+        get("/", (rew, res) -> {
+        	res.redirect("/main.html");
+        	return null;
+        });
         
         get("/routines", (req, res) -> {
         	List<Routine> routines = gymService.getAllRoutines();
@@ -25,5 +30,7 @@ public class GymController {
         	res.status(400);
         	return new ResErr("No routine found with id " + id);
         }, JsonTransformerUtil.json());
+        
+        post("/routines", (req, res) -> gymService.createRoutine(req, res), JsonTransformerUtil.json());
     }
 }

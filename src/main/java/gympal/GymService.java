@@ -8,6 +8,9 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 
+import spark.Request;
+import spark.Response;
+
 public class GymService {
 	
 	final static String databaseUrl = "jdbc:h2:mem:account";
@@ -35,5 +38,11 @@ public class GymService {
 	    connectionSource.close();
 	    return routine;
 
+	}
+	
+	public Routine createRoutine(Request req, Response res) {
+		Routine routine = new Routine();
+		
+		return routine;
 	}
 }
