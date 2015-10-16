@@ -6,5 +6,4 @@ Spark Java
 PostgreSQL  
 Ormlite  
 ReactJS  
-React-Bootstrap  
-Foundation
+React-Bootstrap
