@@ -6,7 +6,7 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable
 public class Routine {
 
-	@DatabaseField
+	@DatabaseField(generatedId = true)
 	private int id;
 	
 	@DatabaseField

@@ -16,6 +16,12 @@ public class GymController {
         	return null;
         });
         
+        get("/initdb", (rew, res) -> {
+        	gymService.initDb();
+        	res.redirect("/main.html");
+        	return null;
+        });
+        
         get("/routines", (req, res) -> {
         	List<Routine> routines = gymService.getAllRoutines();
         	return routines;
