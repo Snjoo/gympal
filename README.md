@@ -8,4 +8,6 @@ Spark Java
 PostgreSQL  
 Ormlite  
 ReactJS  
-Foundation
+Foundation  
+Grunt  
+Reactify
