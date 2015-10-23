@@ -4,6 +4,7 @@
 
 build/
 target/
+node_modules/
 
 .settings/
 src/main/resources/webapp/js/.module-cache/

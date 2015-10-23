@@ -1,3 +1,6 @@
+var React = require('react');
+var ReactDOM = require('react-dom')
+
 var MainPage = React.createClass({
 
   render: function() {
