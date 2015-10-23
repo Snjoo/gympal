@@ -8,4 +8,4 @@ node_modules/
 
 .settings/
 src/main/resources/webapp/js/.module-cache/
-src/main/resources/webapp/jsx/.module-cache/
+jsx/.module-cache/
