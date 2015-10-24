@@ -9,5 +9,7 @@ PostgreSQL
 Ormlite  
 ReactJS  
 Foundation  
+React-Bootstrap  
 Grunt  
-Reactify
+Reactify  
+lodash
