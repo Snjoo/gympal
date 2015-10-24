@@ -1,5 +1,7 @@
 var React = require('react');
-var ReactDOM = require('react-dom')
+var ReactDOM = require('react-dom');
+var Button = require('react-bootstrap').Button;
+var _ = require('lodash');
 
 var MainPage = React.createClass({
 
@@ -27,11 +29,11 @@ var MainPage = React.createClass({
 var RoutineForm = React.createClass({
   getInitialState: function() {
     return {
-      name: "",
-      additionalInfo: "",
-      duration: "",
-      toughness: "",
-      exerciseList: ""
+      name: "HYVÄ",
+      additionalInfo: "YEA BOI",
+      duration: "23",
+      toughness: "55",
+      exerciseList: [{name: "TESTI", additionalInfo: "TESTITIETO", repetitions: "100", id: "1"}]
     };
   },
 
@@ -41,16 +43,39 @@ var RoutineForm = React.createClass({
         <div className="row">
           <div className="large-12 medium-12 columns">
             <RoutineInfo
+              name={this.state.name}
+              duration={this.state.duration}
+              toughness={this.state.toughness}
+              additionalInfo={this.state.additionalInfo}
               nameChangeHandler = {this.handleNameChange}
               additionalInfoChangeHandler = {this.handleAdditionalInfoChange}
               durationChangeHandler = {this.handleDurationChange}
               toughnessChangeHandler = {this.handleToughnessChange}
               />
-            <Exercises />
+            <Exercises
+              exerciseList = {this.state.exerciseList}
+              addExerciseHandler = {this.addExercise}
+              exerciseNameChangeHandler = {this.handleExerciseNameChange}
+              exerciseRepetitionsChangeHandler = {this.handleExerciseRepetitionsChange}
+              exerciseAdditionalInfoChangeHandler = {this.handleExerciseAdditionalInfoChange}
+            />
+            <SaveButton />
           </div>
         </div>
       </form>
     );
+  },
+  addExercise: function(e) {
+    return;
+  },
+  handleExerciseNameChange: function(exerciseId, event) {
+    this.setState({exerciseList: exerciseList});
+  },
+  handleExerciseRepetitionsChange: function(exerciseId, event) {
+    this.setState({exerciseList: exerciseList});
+  },
+  handleExerciseAdditionalInfoChange: function(exerciseId, event) {
+    this.setState({exerciseList: exerciseList});
   },
   handleNameChange: function(event) {
     this.setState({name: event.target.value});
@@ -59,10 +84,16 @@ var RoutineForm = React.createClass({
     this.setState({additionalInfo: event.target.value});
   },
   handleDurationChange: function(event) {
-    this.setState({duration: event.target.value});
+    var duration = event.target.value;
+    if (0 <= duration <= 1000) {
+      this.setState({duration: duration});
+    }
   },
   handleToughnessChange: function(event) {
-    this.setState({toughness: event.target.value});
+    var toughness = event.target.value;
+    if (0 <= toughness <= 100) {
+      this.setState({toughness: toughness});
+    }
   },
 });
 
@@ -73,19 +104,19 @@ var RoutineInfo = React.createClass({
         <div className="large-12 medium-12 columns">
           <div className="row">
             <label htmlFor="name">Routine name</label>&nbsp;
-            <input id="name" type="text" onChange={this.props.nameChangeHandler} />
+            <input id="name" defaultValue={this.props.name} type="text" onChange={this.props.nameChangeHandler} />
           </div>
           <div className="row">
             <label htmlFor="toughness">Toughness (0-100)</label>&nbsp;
-            <input id="toughness" type="number" min="0" max="100" onChange={this.props.toughnessChangeHandler} />
+            <input id="toughness" defaultValue={this.props.toughness} type="number" min="0" max="100" onChange={this.props.toughnessChangeHandler} />
           </div>
           <div className="row">
             <label htmlFor="duration">Duration (minutes)</label>&nbsp;
-            <input id="duration" type="number" min="0" max="1000" onChange={this.props.durationChangeHandler} />
+            <input id="duration" defaultValue={this.props.duration} type="number" min="0" max="1000" onChange={this.props.durationChangeHandler} />
           </div>
           <div className="row">
             <label htmlFor="additionalInfo">Additional info</label>&nbsp;
-            <textarea id="additionalInfo" placeholder="More information about routine" rows="4" cols="80" onChange={this.props.additionalInfoChangeHandler}></textarea>
+            <textarea id="additionalInfo" defaultValue={this.props.additionalInfo} placeholder="More information about routine" rows="4" cols="80" onChange={this.props.additionalInfoChangeHandler}></textarea>
           </div>
         </div>
       </div>
@@ -95,10 +126,68 @@ var RoutineInfo = React.createClass({
 
 var Exercises = React.createClass({
   render: function() {
-    return(
+    var exerciseList = this.props.exerciseList;
+    var exerciseNameChangeHandler = this.props.exerciseNameChangeHandler;
+    var exerciseRepetitionsChangeHandler = this.props.exerciseRepetitionsChangeHandler;
+    var exerciseAdditionalInfoChangeHandler = this.props.exerciseAdditionalInfoChangeHandler;
+    return (
       <div className="row">
         <div className="large-12 medium-12 columns">
           <h3>Exercises</h3>
+          <div className="row">
+            <div className="large-12 medium-12 columns">
+              {_.map(exerciseList, function(exercise) {
+                return (
+                  <Exercise
+                    key = {exercise.id}
+                    exercise = {exercise}
+                    exerciseNameChangeHandler = {exerciseNameChangeHandler}
+                    exerciseRepetitionsChangeHandler = {exerciseRepetitionsChangeHandler}
+                    exerciseAdditionalInfoChangeHandler = {exerciseAdditionalInfoChangeHandler}
+                  />
+                );
+              })}
+              <div className="row">
+                <Button onClick={this.props.addExerciseHandler}>Add exercise</Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+});
+
+var Exercise = React.createClass({
+  render: function() {
+    var exercise = this.props.exercise;
+    return (
+      <div className="row">
+        <div className="large-12 medium-12 columns">
+          <div className="row">
+            <label htmlFor="exerciseName">Exercise name</label>&nbsp;
+            <input id="exerciseName" defaultValue={exercise.name} type="text" onChange={this.props.exerciseNameChangeHandler.bind(null, exercise.id)} />
+          </div>
+          <div className="row">
+            <label htmlFor="exerciseRepetitions">Repetitions</label>&nbsp;
+            <input id="exerciseRepetitions" defaultValue={exercise.repetitions} type="number" onChange={this.props.exerciseRepetitionsChangeHandler.bind(null, exercise.id)} />
+          </div>
+          <div className="row">
+            <label htmlFor="exerciseAdditionalInfo">Additional info</label>&nbsp;
+            <input id="exerciseAdditionalInfo" defaultValue={exercise.additionalInfo} type="text" onChange={this.props.exerciseAdditionalInfoChangeHandler.bind(null, exercise.id)} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+});
+
+var SaveButton = React.createClass({
+  render: function() {
+    return (
+      <div className="row">
+        <div className="large-12 medium-12 columns">
+          <Button>Save routine</Button>
         </div>
       </div>
     );
