@@ -2,12 +2,10 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var Button = require('react-bootstrap').Button;
 var _ = require('lodash');
-var UniqueIdMixin = require('unique-id-mixin');
 
 var MainPage = React.createClass({
 
   render: function() {
-    var title = '<h3>GymPal</h3>';
     return (
       <div className="row">
         <div className="large-2 medium-3 columns">
@@ -60,6 +58,7 @@ var RoutineForm = React.createClass({
               exerciseNameChangeHandler = {this.handleExerciseNameChange}
               exerciseRepetitionsChangeHandler = {this.handleExerciseRepetitionsChange}
               exerciseAdditionalInfoChangeHandler = {this.handleExerciseAdditionalInfoChange}
+              removeExerciseHandler = {this.removeExercise}
             />
             <SaveButton />
           </div>
@@ -74,6 +73,12 @@ var RoutineForm = React.createClass({
     this.setState({exerciseList: exerciseList});
     var newId = this.state.nextExerciseId + 1;
     this.setState({nextExerciseId: newId})
+  },
+  removeExercise: function(exerciseId, event) {
+    var exerciseList = _.filter(this.state.exerciseList, function(exercise) {
+      return exercise.id != exerciseId;
+    });
+    this.setState({exerciseList: exerciseList});
   },
   handleExerciseNameChange: function(exerciseId, event) {
     debugger;
@@ -138,6 +143,7 @@ var Exercises = React.createClass({
     var exerciseNameChangeHandler = this.props.exerciseNameChangeHandler;
     var exerciseRepetitionsChangeHandler = this.props.exerciseRepetitionsChangeHandler;
     var exerciseAdditionalInfoChangeHandler = this.props.exerciseAdditionalInfoChangeHandler;
+    var removeExerciseHandler = this.props.removeExerciseHandler;
     return (
       <div className="row">
         <div className="large-12 medium-12 columns">
@@ -152,6 +158,7 @@ var Exercises = React.createClass({
                     exerciseNameChangeHandler = {exerciseNameChangeHandler}
                     exerciseRepetitionsChangeHandler = {exerciseRepetitionsChangeHandler}
                     exerciseAdditionalInfoChangeHandler = {exerciseAdditionalInfoChangeHandler}
+                    removeExerciseHandler = {removeExerciseHandler}
                   />
                 );
               })}
@@ -184,6 +191,10 @@ var Exercise = React.createClass({
           <div className="row">
             <label htmlFor="exerciseAdditionalInfo">Additional info</label>&nbsp;
             <input id="exerciseAdditionalInfo" defaultValue={exercise.additionalInfo} type="text" onChange={this.props.exerciseAdditionalInfoChangeHandler.bind(null, exercise.id)} />
+          </div>
+          &nbsp;
+          <div className="row">
+            <Button onClick={this.props.removeExerciseHandler.bind(null, exercise.id)}>Remove exercise</Button>
           </div>
           &nbsp;
         </div>
