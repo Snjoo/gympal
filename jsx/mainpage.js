@@ -2,6 +2,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var Button = require('react-bootstrap').Button;
 var _ = require('lodash');
+var UniqueIdMixin = require('unique-id-mixin');
 
 var MainPage = React.createClass({
 
@@ -29,11 +30,12 @@ var MainPage = React.createClass({
 var RoutineForm = React.createClass({
   getInitialState: function() {
     return {
-      name: "HYVÄ",
-      additionalInfo: "YEA BOI",
-      duration: "23",
-      toughness: "55",
-      exerciseList: [{name: "TESTI", additionalInfo: "TESTITIETO", repetitions: "100", id: "1"}]
+      name: "",
+      additionalInfo: "",
+      duration: "",
+      toughness: "",
+      exerciseList: [{name: "", additionalInfo: "", repetitions: "", id: 1}],
+      nextExerciseId: 2
     };
   },
 
@@ -66,9 +68,15 @@ var RoutineForm = React.createClass({
     );
   },
   addExercise: function(e) {
-    return;
+    var exercise = {name: "", additionalInfo: "", repetitions: "", id: this.state.nextExerciseId};
+    var exerciseList = this.state.exerciseList;
+    exerciseList.push(exercise);
+    this.setState({exerciseList: exerciseList});
+    var newId = this.state.nextExerciseId + 1;
+    this.setState({nextExerciseId: newId})
   },
   handleExerciseNameChange: function(exerciseId, event) {
+    debugger;
     this.setState({exerciseList: exerciseList});
   },
   handleExerciseRepetitionsChange: function(exerciseId, event) {
@@ -148,6 +156,7 @@ var Exercises = React.createClass({
                 );
               })}
               <div className="row">
+                &nbsp;
                 <Button onClick={this.props.addExerciseHandler}>Add exercise</Button>
               </div>
             </div>
@@ -176,6 +185,7 @@ var Exercise = React.createClass({
             <label htmlFor="exerciseAdditionalInfo">Additional info</label>&nbsp;
             <input id="exerciseAdditionalInfo" defaultValue={exercise.additionalInfo} type="text" onChange={this.props.exerciseAdditionalInfoChangeHandler.bind(null, exercise.id)} />
           </div>
+          &nbsp;
         </div>
       </div>
     );

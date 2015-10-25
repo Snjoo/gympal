@@ -3,6 +3,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var Button = require('react-bootstrap').Button;
 var _ = require('lodash');
+var UniqueIdMixin = require('unique-id-mixin');
 
 var MainPage = React.createClass({displayName: "MainPage",
 
@@ -30,11 +31,12 @@ var MainPage = React.createClass({displayName: "MainPage",
 var RoutineForm = React.createClass({displayName: "RoutineForm",
   getInitialState: function() {
     return {
-      name: "HYVÄ",
-      additionalInfo: "YEA BOI",
-      duration: "23",
-      toughness: "55",
-      exerciseList: [{name: "TESTI", additionalInfo: "TESTITIETO", repetitions: "100", id: "1"}]
+      name: "",
+      additionalInfo: "",
+      duration: "",
+      toughness: "",
+      exerciseList: [{name: "", additionalInfo: "", repetitions: "", id: 1}],
+      nextExerciseId: 2
     };
   },
 
@@ -67,9 +69,15 @@ var RoutineForm = React.createClass({displayName: "RoutineForm",
     );
   },
   addExercise: function(e) {
-    return;
+    var exercise = {name: "", additionalInfo: "", repetitions: "", id: this.state.nextExerciseId};
+    var exerciseList = this.state.exerciseList;
+    exerciseList.push(exercise);
+    this.setState({exerciseList: exerciseList});
+    var newId = this.state.nextExerciseId + 1;
+    this.setState({nextExerciseId: newId})
   },
   handleExerciseNameChange: function(exerciseId, event) {
+    debugger;
     this.setState({exerciseList: exerciseList});
   },
   handleExerciseRepetitionsChange: function(exerciseId, event) {
@@ -149,6 +157,7 @@ var Exercises = React.createClass({displayName: "Exercises",
                 );
               }), 
               React.createElement("div", {className: "row"}, 
+                " ", 
                 React.createElement(Button, {onClick: this.props.addExerciseHandler}, "Add exercise")
               )
             )
@@ -176,7 +185,8 @@ var Exercise = React.createClass({displayName: "Exercise",
           React.createElement("div", {className: "row"}, 
             React.createElement("label", {htmlFor: "exerciseAdditionalInfo"}, "Additional info"), " ", 
             React.createElement("input", {id: "exerciseAdditionalInfo", defaultValue: exercise.additionalInfo, type: "text", onChange: this.props.exerciseAdditionalInfoChangeHandler.bind(null, exercise.id)})
-          )
+          ), 
+          " "
         )
       )
     );
@@ -200,7 +210,7 @@ ReactDOM.render(
   document.getElementById('container')
 );
 
-},{"lodash":160,"react":392,"react-bootstrap":232,"react-dom":244}],2:[function(require,module,exports){
+},{"lodash":160,"react":392,"react-bootstrap":232,"react-dom":244,"unique-id-mixin":396}],2:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/object/assign"), __esModule: true };
 },{"core-js/library/fn/object/assign":14}],3:[function(require,module,exports){
 module.exports = { "default": require("core-js/library/fn/object/create"), __esModule: true };
@@ -18128,7 +18138,7 @@ var BreadcrumbItem = _react2['default'].createClass({
 
 exports['default'] = BreadcrumbItem;
 module.exports = exports['default'];
-},{"./SafeAnchor":222,"babel-runtime/helpers/extends":8,"babel-runtime/helpers/interop-require-default":10,"babel-runtime/helpers/object-without-properties":12,"classnames":13,"react":392,"warning":396}],170:[function(require,module,exports){
+},{"./SafeAnchor":222,"babel-runtime/helpers/extends":8,"babel-runtime/helpers/interop-require-default":10,"babel-runtime/helpers/object-without-properties":12,"classnames":13,"react":392,"warning":397}],170:[function(require,module,exports){
 'use strict';
 
 var _extends = require('babel-runtime/helpers/extends')['default'];
@@ -23507,7 +23517,7 @@ var OverlayTrigger = _react2['default'].createClass({
 
 exports['default'] = OverlayTrigger;
 module.exports = exports['default'];
-},{"./Overlay":209,"./utils/createChainedFunction":240,"babel-runtime/core-js/object/keys":5,"babel-runtime/helpers/extends":8,"babel-runtime/helpers/interop-require-default":10,"dom-helpers/query/contains":44,"lodash-compat/object/pick":156,"react":392,"react-dom":244,"warning":396}],211:[function(require,module,exports){
+},{"./Overlay":209,"./utils/createChainedFunction":240,"babel-runtime/core-js/object/keys":5,"babel-runtime/helpers/extends":8,"babel-runtime/helpers/interop-require-default":10,"dom-helpers/query/contains":44,"lodash-compat/object/pick":156,"react":392,"react-dom":244,"warning":397}],211:[function(require,module,exports){
 'use strict';
 
 var _extends = require('babel-runtime/helpers/extends')['default'];
@@ -24785,7 +24795,7 @@ ResponsiveEmbed.propTypes = {
 
 exports['default'] = ResponsiveEmbed;
 module.exports = exports['default'];
-},{"babel-runtime/helpers/class-call-check":7,"babel-runtime/helpers/extends":8,"babel-runtime/helpers/inherits":9,"babel-runtime/helpers/interop-require-default":10,"babel-runtime/helpers/object-without-properties":12,"classnames":13,"react":392,"warning":396}],221:[function(require,module,exports){
+},{"babel-runtime/helpers/class-call-check":7,"babel-runtime/helpers/extends":8,"babel-runtime/helpers/inherits":9,"babel-runtime/helpers/interop-require-default":10,"babel-runtime/helpers/object-without-properties":12,"classnames":13,"react":392,"warning":397}],221:[function(require,module,exports){
 'use strict';
 
 var _extends = require('babel-runtime/helpers/extends')['default'];
@@ -27105,7 +27115,7 @@ deprecationWarning.wrapper = function (Component) {
 
 exports['default'] = deprecationWarning;
 module.exports = exports['default'];
-},{"babel-runtime/helpers/class-call-check":7,"babel-runtime/helpers/inherits":9,"babel-runtime/helpers/interop-require-default":10,"warning":396}],243:[function(require,module,exports){
+},{"babel-runtime/helpers/class-call-check":7,"babel-runtime/helpers/inherits":9,"babel-runtime/helpers/interop-require-default":10,"warning":397}],243:[function(require,module,exports){
 'use strict';
 
 var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
@@ -28589,7 +28599,7 @@ function deprecated(propType, explanation) {
 }
 
 module.exports = exports['default'];
-},{"warning":396}],261:[function(require,module,exports){
+},{"warning":397}],261:[function(require,module,exports){
 arguments[4][256][0].apply(exports,arguments)
 },{"./common":259,"dup":256,"react":392}],262:[function(require,module,exports){
 "use strict";
@@ -46582,6 +46592,45 @@ function has(o, k) {
 }
 }).call(this,require('_process'))
 },{"_process":161,"invariant":89,"react":392}],396:[function(require,module,exports){
+var id = 1;
+
+var UniqueIdMixin = {
+
+    componentWillMount: function() {
+
+        this._ids = {};
+        this._gotten = 1;
+
+    },
+    
+    componentWillUpdate: function() {
+
+        this._gotten = 1;
+
+    },
+
+    getNextUid: function( ident ) {
+
+        if ( !this._ids[ ident ] ) {
+            this._ids[ ident ] = [ 'id', ident, id++ ].join( '-' );
+        }
+            
+        return this._ids[ ident ];
+
+    },
+    
+    getNextHtmlFor: function() {
+
+        this._gotten++;
+        return this.getNextUid( this._gotten - ( this._gotten % 2 ) );
+
+    }
+
+};
+
+module.exports = UniqueIdMixin;
+
+},{}],397:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014-2015, Facebook, Inc.
