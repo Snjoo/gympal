@@ -66,6 +66,16 @@ var RoutineForm = React.createClass({
       </form>
     );
   },
+  onSubmit: function(e) {
+    e.preventDefault()
+
+    // check if form is valid
+    var validation = this.refs.form.value().validation
+    if (ReactForms.validation.isFailure(validation)) {
+      console.log('invalid form')
+      return
+    }
+  },
   addExercise: function(e) {
     var exercise = {name: "", additionalInfo: "", repetitions: "", id: this.state.nextExerciseId};
     var exerciseList = this.state.exerciseList;
@@ -81,13 +91,33 @@ var RoutineForm = React.createClass({
     this.setState({exerciseList: exerciseList});
   },
   handleExerciseNameChange: function(exerciseId, event) {
-    debugger;
+    var exerciseList = _.map(this.state.exerciseList, function(exercise) {
+      if (exercise.id == exerciseId) {
+        return (
+          _.assign(exercise, {'name': event.target.value})
+        );
+      } else return exercise;
+    });
     this.setState({exerciseList: exerciseList});
   },
   handleExerciseRepetitionsChange: function(exerciseId, event) {
+    var exerciseList = _.map(this.state.exerciseList, function(exercise) {
+      if (exercise.id == exerciseId) {
+        return (
+          _.assign(exercise, {'repetitions': event.target.value})
+        );
+      } else return exercise;
+    });
     this.setState({exerciseList: exerciseList});
   },
   handleExerciseAdditionalInfoChange: function(exerciseId, event) {
+    var exerciseList = _.map(this.state.exerciseList, function(exercise) {
+      if (exercise.id == exerciseId) {
+        return (
+          _.assign(exercise, {'additionalInfo': event.target.value})
+        );
+      } else return exercise;
+    });
     this.setState({exerciseList: exerciseList});
   },
   handleNameChange: function(event) {
@@ -98,13 +128,13 @@ var RoutineForm = React.createClass({
   },
   handleDurationChange: function(event) {
     var duration = event.target.value;
-    if (0 <= duration <= 1000) {
+    if (duration >= 0 && duration <= 1000) {
       this.setState({duration: duration});
     }
   },
   handleToughnessChange: function(event) {
     var toughness = event.target.value;
-    if (0 <= toughness <= 100) {
+    if (toughness >= 0 && toughness <= 100) {
       this.setState({toughness: toughness});
     }
   },
@@ -117,19 +147,19 @@ var RoutineInfo = React.createClass({
         <div className="large-12 medium-12 columns">
           <div className="row">
             <label htmlFor="name">Routine name</label>&nbsp;
-            <input id="name" defaultValue={this.props.name} type="text" onChange={this.props.nameChangeHandler} />
+            <input id="name" value={this.props.name} required="required" type="text" onChange={this.props.nameChangeHandler} />
           </div>
           <div className="row">
             <label htmlFor="toughness">Toughness (0-100)</label>&nbsp;
-            <input id="toughness" defaultValue={this.props.toughness} type="number" min="0" max="100" onChange={this.props.toughnessChangeHandler} />
+            <input id="toughness" value={this.props.toughness} type="number" min="0" max="100" onChange={this.props.toughnessChangeHandler} />
           </div>
           <div className="row">
             <label htmlFor="duration">Duration (minutes)</label>&nbsp;
-            <input id="duration" defaultValue={this.props.duration} type="number" min="0" max="1000" onChange={this.props.durationChangeHandler} />
+            <input id="duration" value={this.props.duration} type="number" min="0" max="1000" onChange={this.props.durationChangeHandler} />
           </div>
           <div className="row">
             <label htmlFor="additionalInfo">Additional info</label>&nbsp;
-            <textarea id="additionalInfo" defaultValue={this.props.additionalInfo} placeholder="More information about routine" rows="4" cols="80" onChange={this.props.additionalInfoChangeHandler}></textarea>
+            <textarea id="additionalInfo" value={this.props.additionalInfo} placeholder="More information about routine" rows="4" cols="80" onChange={this.props.additionalInfoChangeHandler}></textarea>
           </div>
         </div>
       </div>
@@ -182,15 +212,15 @@ var Exercise = React.createClass({
         <div className="large-12 medium-12 columns">
           <div className="row">
             <label htmlFor="exerciseName">Exercise name</label>&nbsp;
-            <input id="exerciseName" defaultValue={exercise.name} type="text" onChange={this.props.exerciseNameChangeHandler.bind(null, exercise.id)} />
+            <input id="exerciseName" value={exercise.name} required="required" type="text" onChange={this.props.exerciseNameChangeHandler.bind(null, exercise.id)} />
           </div>
           <div className="row">
             <label htmlFor="exerciseRepetitions">Repetitions</label>&nbsp;
-            <input id="exerciseRepetitions" defaultValue={exercise.repetitions} type="number" onChange={this.props.exerciseRepetitionsChangeHandler.bind(null, exercise.id)} />
+            <input id="exerciseRepetitions" value={exercise.repetitions} required="required" type="number" onChange={this.props.exerciseRepetitionsChangeHandler.bind(null, exercise.id)} />
           </div>
           <div className="row">
             <label htmlFor="exerciseAdditionalInfo">Additional info</label>&nbsp;
-            <input id="exerciseAdditionalInfo" defaultValue={exercise.additionalInfo} type="text" onChange={this.props.exerciseAdditionalInfoChangeHandler.bind(null, exercise.id)} />
+            <input id="exerciseAdditionalInfo" value={exercise.additionalInfo} type="text" onChange={this.props.exerciseAdditionalInfoChangeHandler.bind(null, exercise.id)} />
           </div>
           &nbsp;
           <div className="row">
@@ -208,7 +238,7 @@ var SaveButton = React.createClass({
     return (
       <div className="row">
         <div className="large-12 medium-12 columns">
-          <Button>Save routine</Button>
+          <Button type="submit">Save routine</Button>
         </div>
       </div>
     );

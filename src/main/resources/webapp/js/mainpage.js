@@ -67,6 +67,16 @@ var RoutineForm = React.createClass({displayName: "RoutineForm",
       )
     );
   },
+  onSubmit: function(e) {
+    e.preventDefault()
+
+    // check if form is valid
+    var validation = this.refs.form.value().validation
+    if (ReactForms.validation.isFailure(validation)) {
+      console.log('invalid form')
+      return
+    }
+  },
   addExercise: function(e) {
     var exercise = {name: "", additionalInfo: "", repetitions: "", id: this.state.nextExerciseId};
     var exerciseList = this.state.exerciseList;
@@ -82,13 +92,33 @@ var RoutineForm = React.createClass({displayName: "RoutineForm",
     this.setState({exerciseList: exerciseList});
   },
   handleExerciseNameChange: function(exerciseId, event) {
-    debugger;
+    var exerciseList = _.map(this.state.exerciseList, function(exercise) {
+      if (exercise.id == exerciseId) {
+        return (
+          _.assign(exercise, {'name': event.target.value})
+        );
+      } else return exercise;
+    });
     this.setState({exerciseList: exerciseList});
   },
   handleExerciseRepetitionsChange: function(exerciseId, event) {
+    var exerciseList = _.map(this.state.exerciseList, function(exercise) {
+      if (exercise.id == exerciseId) {
+        return (
+          _.assign(exercise, {'repetitions': event.target.value})
+        );
+      } else return exercise;
+    });
     this.setState({exerciseList: exerciseList});
   },
   handleExerciseAdditionalInfoChange: function(exerciseId, event) {
+    var exerciseList = _.map(this.state.exerciseList, function(exercise) {
+      if (exercise.id == exerciseId) {
+        return (
+          _.assign(exercise, {'additionalInfo': event.target.value})
+        );
+      } else return exercise;
+    });
     this.setState({exerciseList: exerciseList});
   },
   handleNameChange: function(event) {
@@ -99,13 +129,13 @@ var RoutineForm = React.createClass({displayName: "RoutineForm",
   },
   handleDurationChange: function(event) {
     var duration = event.target.value;
-    if (0 <= duration <= 1000) {
+    if (duration >= 0 && duration <= 1000) {
       this.setState({duration: duration});
     }
   },
   handleToughnessChange: function(event) {
     var toughness = event.target.value;
-    if (0 <= toughness <= 100) {
+    if (toughness >= 0 && toughness <= 100) {
       this.setState({toughness: toughness});
     }
   },
@@ -118,19 +148,19 @@ var RoutineInfo = React.createClass({displayName: "RoutineInfo",
         React.createElement("div", {className: "large-12 medium-12 columns"}, 
           React.createElement("div", {className: "row"}, 
             React.createElement("label", {htmlFor: "name"}, "Routine name"), " ", 
-            React.createElement("input", {id: "name", defaultValue: this.props.name, type: "text", onChange: this.props.nameChangeHandler})
+            React.createElement("input", {id: "name", value: this.props.name, required: "required", type: "text", onChange: this.props.nameChangeHandler})
           ), 
           React.createElement("div", {className: "row"}, 
             React.createElement("label", {htmlFor: "toughness"}, "Toughness (0-100)"), " ", 
-            React.createElement("input", {id: "toughness", defaultValue: this.props.toughness, type: "number", min: "0", max: "100", onChange: this.props.toughnessChangeHandler})
+            React.createElement("input", {id: "toughness", value: this.props.toughness, type: "number", min: "0", max: "100", onChange: this.props.toughnessChangeHandler})
           ), 
           React.createElement("div", {className: "row"}, 
             React.createElement("label", {htmlFor: "duration"}, "Duration (minutes)"), " ", 
-            React.createElement("input", {id: "duration", defaultValue: this.props.duration, type: "number", min: "0", max: "1000", onChange: this.props.durationChangeHandler})
+            React.createElement("input", {id: "duration", value: this.props.duration, type: "number", min: "0", max: "1000", onChange: this.props.durationChangeHandler})
           ), 
           React.createElement("div", {className: "row"}, 
             React.createElement("label", {htmlFor: "additionalInfo"}, "Additional info"), " ", 
-            React.createElement("textarea", {id: "additionalInfo", defaultValue: this.props.additionalInfo, placeholder: "More information about routine", rows: "4", cols: "80", onChange: this.props.additionalInfoChangeHandler})
+            React.createElement("textarea", {id: "additionalInfo", value: this.props.additionalInfo, placeholder: "More information about routine", rows: "4", cols: "80", onChange: this.props.additionalInfoChangeHandler})
           )
         )
       )
@@ -183,15 +213,15 @@ var Exercise = React.createClass({displayName: "Exercise",
         React.createElement("div", {className: "large-12 medium-12 columns"}, 
           React.createElement("div", {className: "row"}, 
             React.createElement("label", {htmlFor: "exerciseName"}, "Exercise name"), " ", 
-            React.createElement("input", {id: "exerciseName", defaultValue: exercise.name, type: "text", onChange: this.props.exerciseNameChangeHandler.bind(null, exercise.id)})
+            React.createElement("input", {id: "exerciseName", value: exercise.name, required: "required", type: "text", onChange: this.props.exerciseNameChangeHandler.bind(null, exercise.id)})
           ), 
           React.createElement("div", {className: "row"}, 
             React.createElement("label", {htmlFor: "exerciseRepetitions"}, "Repetitions"), " ", 
-            React.createElement("input", {id: "exerciseRepetitions", defaultValue: exercise.repetitions, type: "number", onChange: this.props.exerciseRepetitionsChangeHandler.bind(null, exercise.id)})
+            React.createElement("input", {id: "exerciseRepetitions", value: exercise.repetitions, required: "required", type: "number", onChange: this.props.exerciseRepetitionsChangeHandler.bind(null, exercise.id)})
           ), 
           React.createElement("div", {className: "row"}, 
             React.createElement("label", {htmlFor: "exerciseAdditionalInfo"}, "Additional info"), " ", 
-            React.createElement("input", {id: "exerciseAdditionalInfo", defaultValue: exercise.additionalInfo, type: "text", onChange: this.props.exerciseAdditionalInfoChangeHandler.bind(null, exercise.id)})
+            React.createElement("input", {id: "exerciseAdditionalInfo", value: exercise.additionalInfo, type: "text", onChange: this.props.exerciseAdditionalInfoChangeHandler.bind(null, exercise.id)})
           ), 
           " ", 
           React.createElement("div", {className: "row"}, 
@@ -209,7 +239,7 @@ var SaveButton = React.createClass({displayName: "SaveButton",
     return (
       React.createElement("div", {className: "row"}, 
         React.createElement("div", {className: "large-12 medium-12 columns"}, 
-          React.createElement(Button, null, "Save routine")
+          React.createElement(Button, {type: "submit"}, "Save routine")
         )
       )
     );
