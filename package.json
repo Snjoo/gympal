@@ -15,7 +15,8 @@
     "reactify": "^1.1.1",
     "grunt-reactify": "^0.0.2",
     "grunt-contrib-jshint": "^0.11.3",
-    "grunt-contrib-watch": "^0.6.1"
+    "grunt-contrib-watch": "^0.6.1",
+    "jquery": "^2.1.4"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

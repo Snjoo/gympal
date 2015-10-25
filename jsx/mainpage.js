@@ -2,6 +2,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var Button = require('react-bootstrap').Button;
 var _ = require('lodash');
+var $ = require('jquery');
 
 var MainPage = React.createClass({
 
@@ -39,7 +40,7 @@ var RoutineForm = React.createClass({
 
   render: function() {
     return(
-      <form>
+      <form onSubmit={this.handleSubmit}>
         <div className="row">
           <div className="large-12 medium-12 columns">
             <RoutineInfo
@@ -66,15 +67,22 @@ var RoutineForm = React.createClass({
       </form>
     );
   },
-  onSubmit: function(e) {
-    e.preventDefault()
+  handleSubmit: function(e) {
+    e.preventDefault();
 
-    // check if form is valid
-    var validation = this.refs.form.value().validation
-    if (ReactForms.validation.isFailure(validation)) {
-      console.log('invalid form')
-      return
-    }
+    $.ajax({
+      url: '/routines',
+      dataType: 'json',
+      type: 'POST',
+      data: this.state,
+      success: function(data) {
+        this.setState(this.getInitialState);
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error('/routines', status, err.toString());
+      }.bind(this)
+    });
+
   },
   addExercise: function(e) {
     var exercise = {name: "", additionalInfo: "", repetitions: "", id: this.state.nextExerciseId};

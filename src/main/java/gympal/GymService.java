@@ -2,6 +2,8 @@ package gympal;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
@@ -53,9 +55,16 @@ public class GymService {
 
 	}
 	
-	public Routine createRoutine(Request req, Response res) {
+	public Routine createRoutine(Request req, Response res) throws SQLException {
 		Routine routine = new Routine();
-		
+		routine.setName(req.queryParams("name"));
+		routine.setDuration(Integer.parseInt(req.queryParams("duration")));
+		routine.setToughness(Integer.parseInt(req.queryParams("toughness")));
+		routine.setAdditionalInfo(req.queryParams("additionalInfo"));
+		ConnectionSource connectionSource = new JdbcConnectionSource(databaseUrl, user, pw, dbType);
+		Dao<Routine, String> routineDao = DaoManager.createDao(connectionSource, Routine.class);
+		routineDao.create(routine);
+		connectionSource.close();
 		return routine;
 	}
 }
