@@ -3,8 +3,11 @@ var ReactDOM = require('react-dom');
 var Button = require('react-bootstrap').Button;
 var _ = require('lodash');
 var $ = require('jquery');
+var Router = require('react-router').Router;
+var Route = require('react-router').Route;
+var Link = require('react-router').Link;
 
-var MainPage = React.createClass({
+const MainPage = React.createClass({
 
   render: function() {
     return (
@@ -13,7 +16,8 @@ var MainPage = React.createClass({
           <h5>Navigation</h5>
           <nav>
             <ul className="side-nav">
-              <li>test</li>
+              <li><Link to={'/'}>Main</Link></li>
+              <li><Link to={'/routinelist'}>Routines</Link></li>
             </ul>
           </nav>
         </div>
@@ -26,7 +30,7 @@ var MainPage = React.createClass({
   }
 });
 
-var RoutineForm = React.createClass({
+const RoutineForm = React.createClass({
   getInitialState: function() {
     return {
       name: "",
@@ -149,7 +153,7 @@ var RoutineForm = React.createClass({
   },
 });
 
-var RoutineInfo = React.createClass({
+const RoutineInfo = React.createClass({
   render: function() {
     return(
       <div className="row">
@@ -176,7 +180,7 @@ var RoutineInfo = React.createClass({
   }
 });
 
-var Exercises = React.createClass({
+const Exercises = React.createClass({
   render: function() {
     var exerciseList = this.props.exerciseList;
     var exerciseNameChangeHandler = this.props.exerciseNameChangeHandler;
@@ -213,7 +217,7 @@ var Exercises = React.createClass({
   }
 });
 
-var Exercise = React.createClass({
+const Exercise = React.createClass({
   render: function() {
     var exercise = this.props.exercise;
     return (
@@ -242,7 +246,7 @@ var Exercise = React.createClass({
   }
 });
 
-var SaveButton = React.createClass({
+const SaveButton = React.createClass({
   render: function() {
     return (
       <div className="row">
@@ -254,7 +258,20 @@ var SaveButton = React.createClass({
   }
 });
 
-ReactDOM.render(
-  <MainPage />,
-  document.getElementById('container')
-);
+const RoutineList = React.createClass({
+  render: function() {
+    return (
+      <div className="row">
+        <div className="large-12 medium-12 columns">
+        </div>
+      </div>
+    );
+  }
+});
+
+ReactDOM.render((
+  <Router>
+    <Route path="/" component={MainPage}/>
+    <Route path="/routinelist" component={RoutineList}/>
+  </Router>
+), document.getElementById('container'))

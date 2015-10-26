@@ -10,6 +10,7 @@ Ormlite
 ReactJS  
 Foundation  
 React-Bootstrap  
+React Router  
 Grunt  
 Reactify  
 lodash
