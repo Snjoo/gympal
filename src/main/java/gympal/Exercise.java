@@ -14,9 +14,12 @@ public class Exercise {
 	
 	@DatabaseField
 	private String additionalInfo;
-	
+
 	@DatabaseField
 	private int repetitions;
+	
+	@DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true)
+    private Routine routine;
 	
 	public Exercise() {
 		// Constructor for ormlite
@@ -38,6 +41,10 @@ public class Exercise {
 		return this.repetitions;
 	}
 	
+	public Routine getRoutine() {
+		return routine;
+	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -48,5 +55,9 @@ public class Exercise {
 	
 	public void setRepetitions(int repetitions) {
 		this.repetitions = repetitions;
+	}
+	
+	public void setRoutine(Routine routine) {
+		this.routine = routine;
 	}
 }

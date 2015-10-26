@@ -57,6 +57,7 @@ public class GymService {
 	
 	public Routine createRoutine(Request req, Response res) throws SQLException {
 		Routine routine = new Routine();
+		
 		routine.setName(req.queryParams("name"));
 		routine.setDuration(Integer.parseInt(req.queryParams("duration")));
 		routine.setToughness(Integer.parseInt(req.queryParams("toughness")));
@@ -64,6 +65,13 @@ public class GymService {
 		ConnectionSource connectionSource = new JdbcConnectionSource(databaseUrl, user, pw, dbType);
 		Dao<Routine, String> routineDao = DaoManager.createDao(connectionSource, Routine.class);
 		routineDao.create(routine);
+		String exercisesJson = req.queryParams("exerciseList");
+		List<Exercise> exerciseList = ExerciseJsonUtil.transformJsonToExerciseList(exercisesJson);
+		for (Exercise e : exerciseList) {
+			e.setRoutine(routine);
+			Dao<Exercise, String> exerciseDao = DaoManager.createDao(connectionSource, Exercise.class);
+			exerciseDao.create(e);
+		}
 		connectionSource.close();
 		return routine;
 	}

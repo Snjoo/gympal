@@ -70,12 +70,13 @@ var RoutineForm = React.createClass({displayName: "RoutineForm",
   },
   handleSubmit: function(e) {
     e.preventDefault();
-
+    var data = this.state;
+    data.exerciseList = JSON.stringify(this.state.exerciseList);
     $.ajax({
       url: '/routines',
       dataType: 'json',
       type: 'POST',
-      data: this.state,
+      data: data,
       success: function(data) {
         this.setState(this.getInitialState);
       }.bind(this),
