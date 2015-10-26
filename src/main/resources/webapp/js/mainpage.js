@@ -143,7 +143,7 @@ const RoutineForm = React.createClass({displayName: "RoutineForm",
   handleDurationChange: function(event) {
     var duration = event.target.value;
     if (duration >= 0 && duration <= 1000) {
-      this.setState({duration: duration});
+      this.setState({duration: duration})
     }
   },
   handleToughnessChange: function(event) {
@@ -263,9 +263,28 @@ const RoutineList = React.createClass({displayName: "RoutineList",
   render: function() {
     return (
       React.createElement("div", {className: "row"}, 
-        React.createElement("div", {className: "large-12 medium-12 columns"}
+        React.createElement("div", {className: "large-2 medium-3 columns"}, 
+          React.createElement("h5", null, "Navigation"), 
+          React.createElement("nav", null, 
+            React.createElement("ul", {className: "side-nav"}, 
+              React.createElement("li", null, React.createElement(Link, {to: '/'}, "Main")), 
+              React.createElement("li", null, React.createElement(Link, {to: '/routinelist'}, "Routines"))
+            )
+          )
+        ), 
+        React.createElement("div", {className: "large-10 medium-9 columns"}, 
+          React.createElement("h1", null, "GymPal - Your fitness companion!"), 
+          React.createElement(Routines, null)
         )
       )
+    );
+  }
+});
+
+const Routines = React.createClass({displayName: "Routines",
+  render: function() {
+    return (
+      React.createElement("div", null, "Routines here")
     );
   }
 });

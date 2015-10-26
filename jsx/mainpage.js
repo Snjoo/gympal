@@ -262,9 +262,28 @@ const RoutineList = React.createClass({
   render: function() {
     return (
       <div className="row">
-        <div className="large-12 medium-12 columns">
+        <div className="large-2 medium-3 columns">
+          <h5>Navigation</h5>
+          <nav>
+            <ul className="side-nav">
+              <li><Link to={'/'}>Main</Link></li>
+              <li><Link to={'/routinelist'}>Routines</Link></li>
+            </ul>
+          </nav>
+        </div>
+        <div className="large-10 medium-9 columns">
+          <h1>GymPal - Your fitness companion!</h1>
+          <Routines />
         </div>
       </div>
+    );
+  }
+});
+
+const Routines = React.createClass({
+  render: function() {
+    return (
+      <div>Routines here</div>
     );
   }
 });
