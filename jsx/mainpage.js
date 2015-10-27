@@ -1,6 +1,11 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var Button = require('react-bootstrap').Button;
+var Table = require('react-bootstrap').Table;
+var Navbar = require('react-bootstrap').Navbar;
+var NavBrand = require('react-bootstrap').NavBrand;
+var Nav = require('react-bootstrap').Nav;
+var NavItem = require('react-bootstrap').NavItem;
 var _ = require('lodash');
 var $ = require('jquery');
 var Router = require('react-router').Router;
@@ -12,17 +17,18 @@ const MainPage = React.createClass({
   render: function() {
     return (
       <div className="row">
-        <div className="large-2 medium-3 columns">
-          <h5>Navigation</h5>
-          <nav>
-            <ul className="side-nav">
-              <li><Link to={'/'}>Main</Link></li>
-              <li><Link to={'/routinelist'}>Routines</Link></li>
-            </ul>
-          </nav>
-        </div>
-        <div className="large-10 medium-9 columns">
-          <h1>GymPal - Your fitness companion!</h1>
+        <div className="col-md-12 col-lg-12">
+          <Navbar>
+            <NavBrand><a href="#">GymPal</a></NavBrand>
+            <Nav>
+              <ul>
+                <li><Link to={'/'}>Main</Link></li>
+              </ul>
+              <ul>
+                <li><Link to={'/routinelist'}>Routines</Link></li>
+              </ul>
+            </Nav>
+          </Navbar>
           <RoutineForm />
         </div>
       </div>
@@ -46,7 +52,8 @@ const RoutineForm = React.createClass({
     return(
       <form onSubmit={this.handleSubmit}>
         <div className="row">
-          <div className="large-12 medium-12 columns">
+          <div className="col-md-10 col-md-offset-1">
+            <h1>GymPal - Your fitness companion!</h1>
             <RoutineInfo
               name={this.state.name}
               duration={this.state.duration}
@@ -65,7 +72,10 @@ const RoutineForm = React.createClass({
               exerciseAdditionalInfoChangeHandler = {this.handleExerciseAdditionalInfoChange}
               removeExerciseHandler = {this.removeExercise}
             />
-            <SaveButton />
+            &nbsp;
+            <div className="row">
+              <Button bsStyle="primary" bsSize="large" type="submit">Save routine</Button>
+            </div>
           </div>
         </div>
       </form>
@@ -157,7 +167,7 @@ const RoutineInfo = React.createClass({
   render: function() {
     return(
       <div className="row">
-        <div className="large-12 medium-12 columns">
+        <div className="col-md-12">
           <div className="row">
             <label htmlFor="name">Routine name</label>&nbsp;
             <input id="name" value={this.props.name} required="required" type="text" onChange={this.props.nameChangeHandler} />
@@ -189,10 +199,10 @@ const Exercises = React.createClass({
     var removeExerciseHandler = this.props.removeExerciseHandler;
     return (
       <div className="row">
-        <div className="large-12 medium-12 columns">
+        <div className="col-md-12">
           <h3>Exercises</h3>
           <div className="row">
-            <div className="large-12 medium-12 columns">
+            <div className="col-md-12">
               {_.map(exerciseList, function(exercise) {
                 return (
                   <Exercise
@@ -205,11 +215,12 @@ const Exercises = React.createClass({
                   />
                 );
               })}
-              <div className="row">
-                &nbsp;
-                <Button onClick={this.props.addExerciseHandler}>Add exercise</Button>
-              </div>
+
             </div>
+          </div>
+          <div className="row">
+            &nbsp;
+            <Button onClick={this.props.addExerciseHandler}>Add exercise</Button>
           </div>
         </div>
       </div>
@@ -222,7 +233,7 @@ const Exercise = React.createClass({
     var exercise = this.props.exercise;
     return (
       <div className="row">
-        <div className="large-12 medium-12 columns">
+        <div className="col-md-12">
           <div className="row">
             <label htmlFor="exerciseName">Exercise name</label>&nbsp;
             <input id="exerciseName" value={exercise.name} required="required" type="text" onChange={this.props.exerciseNameChangeHandler.bind(null, exercise.id)} />
@@ -237,21 +248,9 @@ const Exercise = React.createClass({
           </div>
           &nbsp;
           <div className="row">
-            <Button onClick={this.props.removeExerciseHandler.bind(null, exercise.id)}>Remove exercise</Button>
+            <Button bsStyle="danger" onClick={this.props.removeExerciseHandler.bind(null, exercise.id)}>Remove exercise</Button>
           </div>
           &nbsp;
-        </div>
-      </div>
-    );
-  }
-});
-
-const SaveButton = React.createClass({
-  render: function() {
-    return (
-      <div className="row">
-        <div className="large-12 medium-12 columns">
-          <Button type="submit">Save routine</Button>
         </div>
       </div>
     );
@@ -262,17 +261,18 @@ const RoutineList = React.createClass({
   render: function() {
     return (
       <div className="row">
-        <div className="large-2 medium-3 columns">
-          <h5>Navigation</h5>
-          <nav>
-            <ul className="side-nav">
-              <li><Link to={'/'}>Main</Link></li>
-              <li><Link to={'/routinelist'}>Routines</Link></li>
-            </ul>
-          </nav>
-        </div>
-        <div className="large-10 medium-9 columns">
-          <h1>GymPal - Your fitness companion!</h1>
+        <div className="col-md-12 col-lg-12">
+          <Navbar>
+            <NavBrand><a href="#">GymPal</a></NavBrand>
+            <Nav>
+              <ul>
+                <li><Link to={'/'}>Main</Link></li>
+              </ul>
+              <ul>
+                <li><Link to={'/routinelist'}>Routines</Link></li>
+              </ul>
+            </Nav>
+          </Navbar>
           <Routines />
         </div>
       </div>
@@ -281,10 +281,101 @@ const RoutineList = React.createClass({
 });
 
 const Routines = React.createClass({
+  getInitialState: function() {
+    return {
+      data: ""
+    };
+  },
+  componentDidMount: function() {
+    $.ajax({
+      url: '/routines',
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error('/routines', status, err.toString());
+      }.bind(this)
+    });
+  },
   render: function() {
+    var routines = this.state.data.routines;
     return (
-      <div>Routines here</div>
+      <div className="row">
+        <div className="col-md-10 col-md-offset-1">
+          <h2>Routines</h2>
+          <div className="row">
+            <div className="col-md-12">
+              {_.map(routines, function(routine) {
+                return (
+                  <Routine
+                    key = {routine.id}
+                    routine = {routine}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
     );
+  }
+});
+
+const Routine = React.createClass({
+  render: function() {
+    var routine = this.props.routine;
+    return (
+      <div className="row">
+        <div className="col-md-12">
+          <div className="row"><b>Name: </b>{routine.name}</div>
+          <div className="row"><b>Duration: </b>{routine.duration}</div>
+          <div className="row"><b>Toughness: </b>{routine.toughness}</div>
+          <div className="row"><b>Additional info: </b>{routine.additionalInfo}</div>
+          <ExerciseList
+            routine={routine}
+          />
+          &nbsp;
+        </div>
+      </div>
+    );
+  }
+});
+
+const ExerciseList = React.createClass({
+  render: function() {
+    var routine = this.props.routine;
+    if (_.isEmpty(routine.exercises)) {
+      return (null);
+    } else {
+      return (
+        <div className="row">
+          <div className="col-md-6">
+            <Table striped bordered condensed hover>
+              <thead>
+                <tr>
+                  <th>Exercise</th>
+                  <th>Repetitions</th>
+                  <th>Additional info</th>
+                </tr>
+              </thead>
+              <tbody>
+                {_.map(routine.exercises, function(exercise) {
+                  return (
+                    <tr key={exercise.id}>
+                      <td>{exercise.name}</td>
+                      <td>{exercise.repetitions}</td>
+                      <td>{exercise.additionalInfo}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+          </div>
+        </div>
+      );
+    }
   }
 });
 

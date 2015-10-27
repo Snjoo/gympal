@@ -13,6 +13,7 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
+import gympal.JsonTransformerUtil.RoutineList;
 import spark.Request;
 import spark.Response;
 
@@ -30,6 +31,18 @@ public class GymService {
 		connectionSource.close();
 	}
 	
+	public List<Exercise> getAllExercises() throws SQLException {
+		// create a connection source to database
+	    ConnectionSource connectionSource = new JdbcConnectionSource(databaseUrl, user, pw, dbType);
+	    
+	    // instantiate the dao
+	    Dao<Exercise, String> exerciseDao = DaoManager.createDao(connectionSource, Exercise.class);
+	    
+	    List<Exercise> exercises = exerciseDao.queryForAll();
+	    connectionSource.close();
+	    return exercises;
+	}
+	
 	public List<Routine> getAllRoutines() throws SQLException {
 		// create a connection source to database
 	    ConnectionSource connectionSource = new JdbcConnectionSource(databaseUrl, user, pw, dbType);
@@ -40,6 +53,12 @@ public class GymService {
 	    List<Routine> routines = routineDao.queryForAll();
 	    connectionSource.close();
 	    return routines;
+	}
+	
+	public RoutineList getAllRoutinesJson() throws SQLException {
+		List<Routine> routines = getAllRoutines();
+		List<Exercise> exercises = getAllExercises();
+		return JsonTransformerUtil.transformRoutinesAndExercisesToJson(routines, exercises);
 	}
 	
 	public Routine getRoutine(String id) throws SQLException {
@@ -66,7 +85,7 @@ public class GymService {
 		Dao<Routine, String> routineDao = DaoManager.createDao(connectionSource, Routine.class);
 		routineDao.create(routine);
 		String exercisesJson = req.queryParams("exerciseList");
-		List<Exercise> exerciseList = ExerciseJsonUtil.transformJsonToExerciseList(exercisesJson);
+		List<Exercise> exerciseList = JsonTransformerUtil.transformJsonToExerciseList(exercisesJson);
 		for (Exercise e : exerciseList) {
 			e.setRoutine(routine);
 			Dao<Exercise, String> exerciseDao = DaoManager.createDao(connectionSource, Exercise.class);

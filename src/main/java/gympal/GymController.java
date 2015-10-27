@@ -4,6 +4,8 @@ import static spark.Spark.*;
 
 import java.util.List;
 
+import gympal.JsonTransformerUtil.RoutineList;
+
 public class GymController {
 	public static final int PORT = 7878;
 	
@@ -23,8 +25,8 @@ public class GymController {
         });
         
         get("/routines", (req, res) -> {
-        	List<Routine> routines = gymService.getAllRoutines();
-        	return routines;
+        	RoutineList routinesJson = gymService.getAllRoutinesJson();
+        	return routinesJson;
         }, JsonTransformerUtil.json());
         
         get("/routines/:id", (req, res) -> {

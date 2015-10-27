@@ -2,6 +2,11 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 var Button = require('react-bootstrap').Button;
+var Table = require('react-bootstrap').Table;
+var Navbar = require('react-bootstrap').Navbar;
+var NavBrand = require('react-bootstrap').NavBrand;
+var Nav = require('react-bootstrap').Nav;
+var NavItem = require('react-bootstrap').NavItem;
 var _ = require('lodash');
 var $ = require('jquery');
 var Router = require('react-router').Router;
@@ -13,17 +18,18 @@ const MainPage = React.createClass({displayName: "MainPage",
   render: function() {
     return (
       React.createElement("div", {className: "row"}, 
-        React.createElement("div", {className: "large-2 medium-3 columns"}, 
-          React.createElement("h5", null, "Navigation"), 
-          React.createElement("nav", null, 
-            React.createElement("ul", {className: "side-nav"}, 
-              React.createElement("li", null, React.createElement(Link, {to: '/'}, "Main")), 
-              React.createElement("li", null, React.createElement(Link, {to: '/routinelist'}, "Routines"))
+        React.createElement("div", {className: "col-md-12 col-lg-12"}, 
+          React.createElement(Navbar, null, 
+            React.createElement(NavBrand, null, React.createElement("a", {href: "#"}, "GymPal")), 
+            React.createElement(Nav, null, 
+              React.createElement("ul", null, 
+                React.createElement("li", null, React.createElement(Link, {to: '/'}, "Main"))
+              ), 
+              React.createElement("ul", null, 
+                React.createElement("li", null, React.createElement(Link, {to: '/routinelist'}, "Routines"))
+              )
             )
-          )
-        ), 
-        React.createElement("div", {className: "large-10 medium-9 columns"}, 
-          React.createElement("h1", null, "GymPal - Your fitness companion!"), 
+          ), 
           React.createElement(RoutineForm, null)
         )
       )
@@ -47,7 +53,8 @@ const RoutineForm = React.createClass({displayName: "RoutineForm",
     return(
       React.createElement("form", {onSubmit: this.handleSubmit}, 
         React.createElement("div", {className: "row"}, 
-          React.createElement("div", {className: "large-12 medium-12 columns"}, 
+          React.createElement("div", {className: "col-md-10 col-md-offset-1"}, 
+            React.createElement("h1", null, "GymPal - Your fitness companion!"), 
             React.createElement(RoutineInfo, {
               name: this.state.name, 
               duration: this.state.duration, 
@@ -66,7 +73,10 @@ const RoutineForm = React.createClass({displayName: "RoutineForm",
               exerciseAdditionalInfoChangeHandler: this.handleExerciseAdditionalInfoChange, 
               removeExerciseHandler: this.removeExercise}
             ), 
-            React.createElement(SaveButton, null)
+            " ", 
+            React.createElement("div", {className: "row"}, 
+              React.createElement(Button, {bsStyle: "primary", bsSize: "large", type: "submit"}, "Save routine")
+            )
           )
         )
       )
@@ -143,7 +153,7 @@ const RoutineForm = React.createClass({displayName: "RoutineForm",
   handleDurationChange: function(event) {
     var duration = event.target.value;
     if (duration >= 0 && duration <= 1000) {
-      this.setState({duration: duration})
+      this.setState({duration: duration});
     }
   },
   handleToughnessChange: function(event) {
@@ -158,7 +168,7 @@ const RoutineInfo = React.createClass({displayName: "RoutineInfo",
   render: function() {
     return(
       React.createElement("div", {className: "row"}, 
-        React.createElement("div", {className: "large-12 medium-12 columns"}, 
+        React.createElement("div", {className: "col-md-12"}, 
           React.createElement("div", {className: "row"}, 
             React.createElement("label", {htmlFor: "name"}, "Routine name"), " ", 
             React.createElement("input", {id: "name", value: this.props.name, required: "required", type: "text", onChange: this.props.nameChangeHandler})
@@ -190,10 +200,10 @@ const Exercises = React.createClass({displayName: "Exercises",
     var removeExerciseHandler = this.props.removeExerciseHandler;
     return (
       React.createElement("div", {className: "row"}, 
-        React.createElement("div", {className: "large-12 medium-12 columns"}, 
+        React.createElement("div", {className: "col-md-12"}, 
           React.createElement("h3", null, "Exercises"), 
           React.createElement("div", {className: "row"}, 
-            React.createElement("div", {className: "large-12 medium-12 columns"}, 
+            React.createElement("div", {className: "col-md-12"}, 
               _.map(exerciseList, function(exercise) {
                 return (
                   React.createElement(Exercise, {
@@ -205,12 +215,13 @@ const Exercises = React.createClass({displayName: "Exercises",
                     removeExerciseHandler: removeExerciseHandler}
                   )
                 );
-              }), 
-              React.createElement("div", {className: "row"}, 
-                " ", 
-                React.createElement(Button, {onClick: this.props.addExerciseHandler}, "Add exercise")
-              )
+              })
+
             )
+          ), 
+          React.createElement("div", {className: "row"}, 
+            " ", 
+            React.createElement(Button, {onClick: this.props.addExerciseHandler}, "Add exercise")
           )
         )
       )
@@ -223,7 +234,7 @@ const Exercise = React.createClass({displayName: "Exercise",
     var exercise = this.props.exercise;
     return (
       React.createElement("div", {className: "row"}, 
-        React.createElement("div", {className: "large-12 medium-12 columns"}, 
+        React.createElement("div", {className: "col-md-12"}, 
           React.createElement("div", {className: "row"}, 
             React.createElement("label", {htmlFor: "exerciseName"}, "Exercise name"), " ", 
             React.createElement("input", {id: "exerciseName", value: exercise.name, required: "required", type: "text", onChange: this.props.exerciseNameChangeHandler.bind(null, exercise.id)})
@@ -238,21 +249,9 @@ const Exercise = React.createClass({displayName: "Exercise",
           ), 
           " ", 
           React.createElement("div", {className: "row"}, 
-            React.createElement(Button, {onClick: this.props.removeExerciseHandler.bind(null, exercise.id)}, "Remove exercise")
+            React.createElement(Button, {bsStyle: "danger", onClick: this.props.removeExerciseHandler.bind(null, exercise.id)}, "Remove exercise")
           ), 
           " "
-        )
-      )
-    );
-  }
-});
-
-const SaveButton = React.createClass({displayName: "SaveButton",
-  render: function() {
-    return (
-      React.createElement("div", {className: "row"}, 
-        React.createElement("div", {className: "large-12 medium-12 columns"}, 
-          React.createElement(Button, {type: "submit"}, "Save routine")
         )
       )
     );
@@ -263,17 +262,18 @@ const RoutineList = React.createClass({displayName: "RoutineList",
   render: function() {
     return (
       React.createElement("div", {className: "row"}, 
-        React.createElement("div", {className: "large-2 medium-3 columns"}, 
-          React.createElement("h5", null, "Navigation"), 
-          React.createElement("nav", null, 
-            React.createElement("ul", {className: "side-nav"}, 
-              React.createElement("li", null, React.createElement(Link, {to: '/'}, "Main")), 
-              React.createElement("li", null, React.createElement(Link, {to: '/routinelist'}, "Routines"))
+        React.createElement("div", {className: "col-md-12 col-lg-12"}, 
+          React.createElement(Navbar, null, 
+            React.createElement(NavBrand, null, React.createElement("a", {href: "#"}, "GymPal")), 
+            React.createElement(Nav, null, 
+              React.createElement("ul", null, 
+                React.createElement("li", null, React.createElement(Link, {to: '/'}, "Main"))
+              ), 
+              React.createElement("ul", null, 
+                React.createElement("li", null, React.createElement(Link, {to: '/routinelist'}, "Routines"))
+              )
             )
-          )
-        ), 
-        React.createElement("div", {className: "large-10 medium-9 columns"}, 
-          React.createElement("h1", null, "GymPal - Your fitness companion!"), 
+          ), 
           React.createElement(Routines, null)
         )
       )
@@ -282,10 +282,101 @@ const RoutineList = React.createClass({displayName: "RoutineList",
 });
 
 const Routines = React.createClass({displayName: "Routines",
+  getInitialState: function() {
+    return {
+      data: ""
+    };
+  },
+  componentDidMount: function() {
+    $.ajax({
+      url: '/routines',
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error('/routines', status, err.toString());
+      }.bind(this)
+    });
+  },
   render: function() {
+    var routines = this.state.data.routines;
     return (
-      React.createElement("div", null, "Routines here")
+      React.createElement("div", {className: "row"}, 
+        React.createElement("div", {className: "col-md-10 col-md-offset-1"}, 
+          React.createElement("h2", null, "Routines"), 
+          React.createElement("div", {className: "row"}, 
+            React.createElement("div", {className: "col-md-12"}, 
+              _.map(routines, function(routine) {
+                return (
+                  React.createElement(Routine, {
+                    key: routine.id, 
+                    routine: routine}
+                  )
+                );
+              })
+            )
+          )
+        )
+      )
     );
+  }
+});
+
+const Routine = React.createClass({displayName: "Routine",
+  render: function() {
+    var routine = this.props.routine;
+    return (
+      React.createElement("div", {className: "row"}, 
+        React.createElement("div", {className: "col-md-12"}, 
+          React.createElement("div", {className: "row"}, React.createElement("b", null, "Name: "), routine.name), 
+          React.createElement("div", {className: "row"}, React.createElement("b", null, "Duration: "), routine.duration), 
+          React.createElement("div", {className: "row"}, React.createElement("b", null, "Toughness: "), routine.toughness), 
+          React.createElement("div", {className: "row"}, React.createElement("b", null, "Additional info: "), routine.additionalInfo), 
+          React.createElement(ExerciseList, {
+            routine: routine}
+          ), 
+          " "
+        )
+      )
+    );
+  }
+});
+
+const ExerciseList = React.createClass({displayName: "ExerciseList",
+  render: function() {
+    var routine = this.props.routine;
+    if (_.isEmpty(routine.exercises)) {
+      return (null);
+    } else {
+      return (
+        React.createElement("div", {className: "row"}, 
+          React.createElement("div", {className: "col-md-6"}, 
+            React.createElement(Table, {striped: true, bordered: true, condensed: true, hover: true}, 
+              React.createElement("thead", null, 
+                React.createElement("tr", null, 
+                  React.createElement("th", null, "Exercise"), 
+                  React.createElement("th", null, "Repetitions"), 
+                  React.createElement("th", null, "Additional info")
+                )
+              ), 
+              React.createElement("tbody", null, 
+                _.map(routine.exercises, function(exercise) {
+                  return (
+                    React.createElement("tr", {key: exercise.id}, 
+                      React.createElement("td", null, exercise.name), 
+                      React.createElement("td", null, exercise.repetitions), 
+                      React.createElement("td", null, exercise.additionalInfo)
+                    )
+                  );
+                })
+              )
+            )
+          )
+        )
+      );
+    }
   }
 });
 
