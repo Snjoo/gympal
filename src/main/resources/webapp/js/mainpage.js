@@ -53,7 +53,7 @@ const RoutineForm = React.createClass({displayName: "RoutineForm",
     return(
       React.createElement("form", {onSubmit: this.handleSubmit}, 
         React.createElement("div", {className: "row"}, 
-          React.createElement("div", {className: "col-md-10 col-md-offset-1"}, 
+          React.createElement("div", {className: "col-md-4 col-md-offset-1"}, 
             React.createElement("h1", null, "GymPal - Your fitness companion!"), 
             React.createElement(RoutineInfo, {
               name: this.state.name, 
@@ -169,21 +169,21 @@ const RoutineInfo = React.createClass({displayName: "RoutineInfo",
     return(
       React.createElement("div", {className: "row"}, 
         React.createElement("div", {className: "col-md-12"}, 
-          React.createElement("div", {className: "row"}, 
+          React.createElement("div", {className: "form-group"}, 
             React.createElement("label", {htmlFor: "name"}, "Routine name"), " ", 
             React.createElement("input", {id: "name", value: this.props.name, required: "required", type: "text", onChange: this.props.nameChangeHandler})
           ), 
-          React.createElement("div", {className: "row"}, 
+          React.createElement("div", {className: "form-group"}, 
             React.createElement("label", {htmlFor: "toughness"}, "Toughness (0-100)"), " ", 
             React.createElement("input", {id: "toughness", value: this.props.toughness, type: "number", min: "0", max: "100", onChange: this.props.toughnessChangeHandler})
           ), 
-          React.createElement("div", {className: "row"}, 
+          React.createElement("div", {className: "form-group"}, 
             React.createElement("label", {htmlFor: "duration"}, "Duration (minutes)"), " ", 
             React.createElement("input", {id: "duration", value: this.props.duration, type: "number", min: "0", max: "1000", onChange: this.props.durationChangeHandler})
           ), 
-          React.createElement("div", {className: "row"}, 
+          React.createElement("div", {className: "form-group"}, 
             React.createElement("label", {htmlFor: "additionalInfo"}, "Additional info"), " ", 
-            React.createElement("textarea", {id: "additionalInfo", value: this.props.additionalInfo, placeholder: "More information about routine", rows: "4", cols: "80", onChange: this.props.additionalInfoChangeHandler})
+            React.createElement("textarea", {id: "additionalInfo", className: "form-control", value: this.props.additionalInfo, placeholder: "More information about routine", rows: "3", onChange: this.props.additionalInfoChangeHandler})
           )
         )
       )
@@ -235,15 +235,15 @@ const Exercise = React.createClass({displayName: "Exercise",
     return (
       React.createElement("div", {className: "row"}, 
         React.createElement("div", {className: "col-md-12"}, 
-          React.createElement("div", {className: "row"}, 
+          React.createElement("div", {className: "form-group"}, 
             React.createElement("label", {htmlFor: "exerciseName"}, "Exercise name"), " ", 
             React.createElement("input", {id: "exerciseName", value: exercise.name, required: "required", type: "text", onChange: this.props.exerciseNameChangeHandler.bind(null, exercise.id)})
           ), 
-          React.createElement("div", {className: "row"}, 
+          React.createElement("div", {className: "form-group"}, 
             React.createElement("label", {htmlFor: "exerciseRepetitions"}, "Repetitions"), " ", 
             React.createElement("input", {id: "exerciseRepetitions", value: exercise.repetitions, required: "required", type: "number", onChange: this.props.exerciseRepetitionsChangeHandler.bind(null, exercise.id)})
           ), 
-          React.createElement("div", {className: "row"}, 
+          React.createElement("div", {className: "form-group"}, 
             React.createElement("label", {htmlFor: "exerciseAdditionalInfo"}, "Additional info"), " ", 
             React.createElement("input", {id: "exerciseAdditionalInfo", value: exercise.additionalInfo, type: "text", onChange: this.props.exerciseAdditionalInfoChangeHandler.bind(null, exercise.id)})
           ), 

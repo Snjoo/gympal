@@ -52,7 +52,7 @@ const RoutineForm = React.createClass({
     return(
       <form onSubmit={this.handleSubmit}>
         <div className="row">
-          <div className="col-md-10 col-md-offset-1">
+          <div className="col-md-4 col-md-offset-1">
             <h1>GymPal - Your fitness companion!</h1>
             <RoutineInfo
               name={this.state.name}
@@ -168,21 +168,21 @@ const RoutineInfo = React.createClass({
     return(
       <div className="row">
         <div className="col-md-12">
-          <div className="row">
+          <div className="form-group">
             <label htmlFor="name">Routine name</label>&nbsp;
             <input id="name" value={this.props.name} required="required" type="text" onChange={this.props.nameChangeHandler} />
           </div>
-          <div className="row">
+          <div className="form-group">
             <label htmlFor="toughness">Toughness (0-100)</label>&nbsp;
             <input id="toughness" value={this.props.toughness} type="number" min="0" max="100" onChange={this.props.toughnessChangeHandler} />
           </div>
-          <div className="row">
+          <div className="form-group">
             <label htmlFor="duration">Duration (minutes)</label>&nbsp;
             <input id="duration" value={this.props.duration} type="number" min="0" max="1000" onChange={this.props.durationChangeHandler} />
           </div>
-          <div className="row">
+          <div className="form-group">
             <label htmlFor="additionalInfo">Additional info</label>&nbsp;
-            <textarea id="additionalInfo" value={this.props.additionalInfo} placeholder="More information about routine" rows="4" cols="80" onChange={this.props.additionalInfoChangeHandler}></textarea>
+            <textarea id="additionalInfo" className="form-control" value={this.props.additionalInfo} placeholder="More information about routine" rows="3" onChange={this.props.additionalInfoChangeHandler}></textarea>
           </div>
         </div>
       </div>
@@ -234,15 +234,15 @@ const Exercise = React.createClass({
     return (
       <div className="row">
         <div className="col-md-12">
-          <div className="row">
+          <div className="form-group">
             <label htmlFor="exerciseName">Exercise name</label>&nbsp;
             <input id="exerciseName" value={exercise.name} required="required" type="text" onChange={this.props.exerciseNameChangeHandler.bind(null, exercise.id)} />
           </div>
-          <div className="row">
+          <div className="form-group">
             <label htmlFor="exerciseRepetitions">Repetitions</label>&nbsp;
             <input id="exerciseRepetitions" value={exercise.repetitions} required="required" type="number" onChange={this.props.exerciseRepetitionsChangeHandler.bind(null, exercise.id)} />
           </div>
-          <div className="row">
+          <div className="form-group">
             <label htmlFor="exerciseAdditionalInfo">Additional info</label>&nbsp;
             <input id="exerciseAdditionalInfo" value={exercise.additionalInfo} type="text" onChange={this.props.exerciseAdditionalInfoChangeHandler.bind(null, exercise.id)} />
           </div>
