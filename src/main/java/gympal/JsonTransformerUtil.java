@@ -15,13 +15,13 @@ public class JsonTransformerUtil {
 		List<JsonRoutine> routines;
 	}
 	
-	private static class JsonRoutine {
-		private int id;
-		private String name;
-		private String additionalInfo;
-		private int duration;
-		private int toughness;
-		private List<Exercise> exercises;
+	public static class JsonRoutine {
+		public int id;
+		public String name;
+		public String additionalInfo;
+		public int duration;
+		public int toughness;
+		public List<Exercise> exercises;
 		
 	}
 
