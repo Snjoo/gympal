@@ -1,5 +1,7 @@
 package gympal;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -19,21 +21,26 @@ import spark.Response;
 
 public class GymService {
 	
-	final static String databaseUrl = "jdbc:postgresql://localhost/test";
-	final static String user = "test";
-	final static String pw = "test";
-	final DatabaseType dbType = new PostgresDatabaseType();
+	private static JdbcConnectionSource getConnection() throws URISyntaxException, SQLException {
+	    URI dbUri = new URI(System.getenv("DATABASE_URL"));
+
+	    String username = dbUri.getUserInfo().split(":")[0];
+	    String password = dbUri.getUserInfo().split(":")[1];
+	    String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
+	    DatabaseType dbType = new PostgresDatabaseType();
+	    return new JdbcConnectionSource(dbUrl, username, password, dbType);
+	}
 	
-	public void initDb() throws SQLException {
-		ConnectionSource connectionSource = new JdbcConnectionSource(databaseUrl, user, pw, dbType);
+	public void initDb() throws SQLException, URISyntaxException {
+		ConnectionSource connectionSource = getConnection();
 		TableUtils.createTableIfNotExists(connectionSource, Routine.class);
 		TableUtils.createTableIfNotExists(connectionSource, Exercise.class);
 		connectionSource.close();
 	}
 	
-	public List<Exercise> getAllExercises() throws SQLException {
+	public List<Exercise> getAllExercises() throws SQLException, URISyntaxException {
 		// create a connection source to database
-	    ConnectionSource connectionSource = new JdbcConnectionSource(databaseUrl, user, pw, dbType);
+	    ConnectionSource connectionSource = getConnection();
 	    
 	    // instantiate the dao
 	    Dao<Exercise, String> exerciseDao = DaoManager.createDao(connectionSource, Exercise.class);
@@ -43,9 +50,9 @@ public class GymService {
 	    return exercises;
 	}
 	
-	public List<Routine> getAllRoutines() throws SQLException {
+	public List<Routine> getAllRoutines() throws SQLException, URISyntaxException {
 		// create a connection source to database
-	    ConnectionSource connectionSource = new JdbcConnectionSource(databaseUrl, user, pw, dbType);
+	    ConnectionSource connectionSource = getConnection();
 	    
 	    // instantiate the dao
 	    Dao<Routine, String> routineDao = DaoManager.createDao(connectionSource, Routine.class);
@@ -55,15 +62,15 @@ public class GymService {
 	    return routines;
 	}
 	
-	public RoutineList getAllRoutinesJson() throws SQLException {
+	public RoutineList getAllRoutinesJson() throws SQLException, URISyntaxException {
 		List<Routine> routines = getAllRoutines();
 		List<Exercise> exercises = getAllExercises();
 		return JsonTransformerUtil.transformRoutinesAndExercisesToJson(routines, exercises);
 	}
 	
-	public Routine getRoutine(String id) throws SQLException {
+	public Routine getRoutine(String id) throws SQLException, URISyntaxException {
 	    // create a connection source to database
-	    ConnectionSource connectionSource = new JdbcConnectionSource(databaseUrl, user, pw, dbType);
+	    ConnectionSource connectionSource = getConnection();
 
 	    // instantiate the dao
 	    Dao<Routine, String> routineDao = DaoManager.createDao(connectionSource, Routine.class);
@@ -74,14 +81,14 @@ public class GymService {
 
 	}
 	
-	public Routine createRoutine(Request req, Response res) throws SQLException {
+	public Routine createRoutine(Request req, Response res) throws SQLException, URISyntaxException {
 		Routine routine = new Routine();
 		
 		routine.setName(req.queryParams("name"));
 		routine.setDuration(Integer.parseInt(req.queryParams("duration")));
 		routine.setToughness(Integer.parseInt(req.queryParams("toughness")));
 		routine.setAdditionalInfo(req.queryParams("additionalInfo"));
-		ConnectionSource connectionSource = new JdbcConnectionSource(databaseUrl, user, pw, dbType);
+		ConnectionSource connectionSource = getConnection();
 		Dao<Routine, String> routineDao = DaoManager.createDao(connectionSource, Routine.class);
 		routineDao.create(routine);
 		String exercisesJson = req.queryParams("exerciseList");
