@@ -21,24 +21,23 @@ import spark.Response;
 
 public class GymService {
 	
-	private static JdbcConnectionSource getConnection() throws URISyntaxException, SQLException {
-	    URI dbUri = new URI(System.getenv("DATABASE_URL"));
-
-	    String username = dbUri.getUserInfo().split(":")[0];
-	    String password = dbUri.getUserInfo().split(":")[1];
-	    String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
-	    DatabaseType dbType = new PostgresDatabaseType();
-	    return new JdbcConnectionSource(dbUrl, username, password, dbType);
+	final static String databaseUrl = "jdbc:postgresql://localhost/test";
+	final static String user = "test";
+	final static String pw = "test";
+	final static DatabaseType dbType = new PostgresDatabaseType();
+	
+	private static JdbcConnectionSource getConnection() throws SQLException {
+	    return new JdbcConnectionSource(databaseUrl, user, pw, dbType);
 	}
 	
-	public void initDb() throws SQLException, URISyntaxException {
+	public void initDb() throws SQLException {
 		ConnectionSource connectionSource = getConnection();
 		TableUtils.createTableIfNotExists(connectionSource, Routine.class);
 		TableUtils.createTableIfNotExists(connectionSource, Exercise.class);
 		connectionSource.close();
 	}
 	
-	public List<Exercise> getAllExercises() throws SQLException, URISyntaxException {
+	public List<Exercise> getAllExercises() throws SQLException {
 		// create a connection source to database
 	    ConnectionSource connectionSource = getConnection();
 	    
@@ -50,7 +49,7 @@ public class GymService {
 	    return exercises;
 	}
 	
-	public List<Routine> getAllRoutines() throws SQLException, URISyntaxException {
+	public List<Routine> getAllRoutines() throws SQLException {
 		// create a connection source to database
 	    ConnectionSource connectionSource = getConnection();
 	    
@@ -62,7 +61,7 @@ public class GymService {
 	    return routines;
 	}
 	
-	public RoutineList getAllRoutinesJson() throws SQLException, URISyntaxException {
+	public RoutineList getAllRoutinesJson() throws SQLException {
 		List<Routine> routines = getAllRoutines();
 		List<Exercise> exercises = getAllExercises();
 		return JsonTransformerUtil.transformRoutinesAndExercisesToJson(routines, exercises);
@@ -81,7 +80,7 @@ public class GymService {
 
 	}
 	
-	public Routine createRoutine(Request req, Response res) throws SQLException, URISyntaxException {
+	public Routine createRoutine(Request req, Response res) throws SQLException {
 		Routine routine = new Routine();
 		
 		routine.setName(req.queryParams("name"));
