@@ -74,7 +74,7 @@ const RoutineForm = React.createClass({
             />
             &nbsp;
             <div className="row">
-              <Button bsStyle="primary" bsSize="large" type="submit">Save routine</Button>
+              <Button id="saveButton" bsStyle="primary" bsSize="large" type="submit">Save routine</Button>
             </div>
           </div>
         </div>
@@ -220,7 +220,7 @@ const Exercises = React.createClass({
           </div>
           <div className="row">
             &nbsp;
-            <Button onClick={this.props.addExerciseHandler}>Add exercise</Button>
+            <Button id="addExercise" onClick={this.props.addExerciseHandler}>Add exercise</Button>
           </div>
         </div>
       </div>

@@ -4,12 +4,21 @@
 
 Your greatest fitness companion!
 
-Spark Java  
-PostgreSQL  
-Ormlite  
-ReactJS  
-React-Bootstrap  
-React Router  
-Grunt  
-Reactify  
-lodash
+[Spark Java](http://sparkjava.com/)  
+[PostgreSQL](http://www.postgresql.org/)  
+[Ormlite](http://ormlite.com/)  
+[ReactJS](https://facebook.github.io/react/)  
+[React-Bootstrap](https://react-bootstrap.github.io/)  
+[React Router](https://github.com/rackt/react-router)  
+[Grunt](http://gruntjs.com/)  
+[Reactify](https://github.com/andreypopp/reactify)  
+[lodash](https://lodash.com/)  
+[Jasmine](http://jasmine.github.io/)  
+[Zombie](http://zombie.js.org/)  
+
+Installation:
+```
+Configure database to GymService.java  
+mvn clean install  
+java -jar /target/gympal-jar-with-dependencies.jar
+```
